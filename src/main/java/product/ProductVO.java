@@ -1,4 +1,4 @@
-package servlet;
+package product;
 
 import java.sql.Date;
 

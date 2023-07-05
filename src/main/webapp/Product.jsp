@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"
+    isELIgnored="false"
 %>
 
 <!DOCTYPE html>
@@ -15,34 +16,47 @@
 		}
 	</style>
 	
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+	<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous"> -->
+
+	<script>
+		function process_list(){   // 신상품순, 가격순 버튼 클릭시 submit
+			document.forms['searching'].submit();
+		} 
+	</script>
+
 </head>
 
 <body data-spy="scroll" data-target=".navbar-collapse">
 	<%@ include file="./common/nav.jsp" %>
 	<% 
 		String file_repo = "/Users/sunny/Desktop/SemiProject3/img/";
+		String word = request.getParameter("word");
 		String food = request.getParameter("food");
 		String snack = request.getParameter("snack");
-		String word = request.getParameter("word");
+		String order = request.getParameter("order");
+		String kg1 = request.getParameter("kg1");
+		String kg2 = request.getParameter("kg2");
+		String price1 = request.getParameter("price1");
+		String price2 = request.getParameter("price2");
 	%>
 	
 	
 
 	<!--Test section-->
 	<div class="culmn">
+    	<form name = "searching" class="form-inline my-2 my-lg-0" action="product" method="get">
        <section id="test" class="test bg-grey roomy-60 m-top-120 fix">
                <div class="container">
                    <div class="row" style="margin:0 15%;">                        
-			      	<form class="form-inline my-2 my-lg-0" action="product" method="get">
                        <table class="table">
 						  <thead>
 						    <tr>
-						      <th scope="col" colspan=4>
-							      <input class="form-control" type="search" placeholder="Search" aria-label="Search" name = "word" style="width:70%">
-							      <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fa fa-search"></i></button>
+						      <th scope="col" style = "font-size:25px;">상품명</th>
+						      <td>
 							      <input type="hidden" name="command" value = "search"/>
-						      </th>
+							      <input class="form-control" type="search" placeholder="Search" aria-label="Search" name = "word" <%if(word != null){%>value="<%=word%>"<%}%> style="width:70%">
+							      <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fa fa-search"></i></button>
+						      </td>
 						    </tr>
 						  </thead>
 						  <tbody class="table-group-divider" >
@@ -55,13 +69,28 @@
 								</tr>
 								
 								<tr>
+									<th scope="row" style="width:13%;">용량</th>
+									<td>
+										<span class="cond"><input type="text" name = "kg1" placeholder = "0.0" <%if(kg1 != null){%>value="<%=kg1%>"<%}%>> ~</span>
+										<span class="cond"><input type="text" name = "kg2" placeholder = "20.0" <%if(kg2 != null){%>value="<%=kg2%>"<%}%>> kg</span>
+									</td>
+								</tr>
+
+								<tr>
+									<th scope="row" style="width:13%;">가격</th>
+									<td>
+										<span class="cond"><input type="text" name = "price1" placeholder = "0" <%if(price1 != null){%>value="<%=price1%>"<%}%>> ~</span>
+										<span class="cond"><input type="text" name = "price2" placeholder = "0" <%if(price2 != null){%>value="<%=price2%>"<%}%>> 원</span>
+									</td>
+								</tr>
+								<!-- <tr>
 									<th scope="row" style="width:13%;">kg</th>
 									<td>
-									<!-- <span class="cond"><input type="checkbox" name = "1" value="1">~1kg</span>
+									<span class="cond"><input type="checkbox" name = "1" value="1">~1kg</span>
 									<span class="cond"><input type="checkbox">1~3kg</span>
 									<span class="cond"><input type="checkbox">3~5kg</span>
-									<span class="cond"><input type="checkbox">5kg~</span> -->
-									<!-- <input type="range" class="form-range" min="0" max="10" step="1" id="customRange3" style="width:50%;"> -->
+									<span class="cond"><input type="checkbox">5kg~</span>
+									<input type="range" class="form-range" min="0" max="10" step="1" id="customRange3" style="width:50%;">
 									 <input type="range" min="10" max="30" 
                   					  list="temperatures">30&deg; // list와 밑에 id를 똑같이 해줘야 연결이된다.
 								    <datalist id="temperatures">
@@ -70,13 +99,27 @@
 								         <option value="28" label="High">
 								    </datalist>
 									</td>
-								</tr>
+								</tr> -->
 							</tbody>
 						</table>
-			   		 </form>
                    </div>
                </div>
            </section><!-- End off test section -->
+           <div class="container">
+		<div class="position-relative" style = "margin-top: 5%;">
+			<div class="btn-group btn-group-sm position-absolute bottom-0 end-0" role="group" aria-label="Basic radio toggle button group">
+				<input type="radio" class="btn-check" name="order" id="btnradio1" autocomplete="off" value = "recent" onclick = "process_list();" <%if(order == null || order.equals("recent")){%>checked<%}%>>
+				<label class="btn btn-outline-primary" for="btnradio1">신상품순</label>
+				
+				<input type="radio" class="btn-check" name="order" id="btnradio2" autocomplete="off" value = "Hprice" onclick = "process_list();" <%if(order != null && order.equals("Hprice")){%>checked<%}%>>
+				<label class="btn btn-outline-primary" for="btnradio2">가격높은순</label>
+				
+				<input type="radio" class="btn-check" name="order" id="btnradio3" autocomplete="off" value = "Lprice" onclick = "process_list();" <%if(order != null && order.equals("Lprice")){%>checked<%}%>>
+				<label class="btn btn-outline-primary" for="btnradio3">가격낮은순</label>
+			</div>
+		</div>
+		</div>
+  		 </form>
        </div>
 
        <div class="culmn">
@@ -84,18 +127,6 @@
            <section id="product" class="product">
 				<div class="container">
 					<div class="main_product roomy-80" >
-						<div class="position-relative">
-							<div class="btn-group btn-group-sm position-absolute bottom-0 end-0" role="group" aria-label="Basic radio toggle button group">
-								<input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked onclick="condSearch">
-								<label class="btn btn-outline-primary" for="btnradio1">신상품순</label>
-								
-								<input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
-								<label class="btn btn-outline-primary" for="btnradio2">가격높은순</label>
-								
-								<input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
-								<label class="btn btn-outline-primary" for="btnradio3">가격낮은순</label>
-							</div>
-						</div>
 						<div class="carousel-inner" role="listbox">
                            <div class="item active">
                                <div class="container">
@@ -135,19 +166,19 @@
 
 	<nav aria-label="Page navigation example" style="text-align:center;"> <!-- 전체개수/페이지별 개수 -->
 		<ul class="pagination">
-			<li class="page-item">
-				<a class="page-link" href="#" aria-label="Previous">
+			<%-- <li class="page-item">
+				<a class="page-link" href="product?command=dogFood&page=${i+1 }" aria-label="Previous">
 				<span aria-hidden="true">&laquo;</span>
 				</a>
-			</li>
-			<c:forEach var="page" items="${pageCount }">
-				<li class="page-item"><a class="page-link" href="#">${page}</a></li>
+			</li> --%>
+			<c:forEach var="i" begin = "1" end="${pageCount }">
+				<li class="page-item"><a class="page-link" href="product?command=dogFood&page=${i}">${i}</a></li>
 			</c:forEach>
-			<li class="page-item">
-				<a class="page-link" href="#" aria-label="Next">
+			<%-- <li class="page-item">
+				<a class="page-link" href="product?command=dogFood&page=${i+1 }" aria-label="Next">
 				<span aria-hidden="true">&raquo;</span>
 				</a>
-			</li>
+			</li> --%>
 		</ul>
 	</nav>
 		

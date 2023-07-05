@@ -1,7 +1,6 @@
-package servlet;
+package product;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -12,18 +11,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import servlet.TryDAO;
+import servlet.TryVO;
 
 /**
- * Servlet implementation class Home
+ * Servlet implementation class Product
  */
 @WebServlet("/product")
-public class Home extends HttpServlet {
+public class Product extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Home() {
+    public Product() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -44,53 +45,75 @@ public class Home extends HttpServlet {
 		String command = request.getParameter("command");
 		String page = request.getParameter("page");
 		
-		
-		System.err.println("command > "+ command);
-		System.err.println("page > "+ page);
 		if(command != null && command.equals("dogFood")) {
 			
 			ProductDAO dao = new ProductDAO();
+			List<ProductVO> list;
+			int count = dao.Count();
 			
-			List<ProductVO> list = dao.listProduct();
+			request.setAttribute("pageCount", (count/9)+1);
+			
+			if(page == null || page == "1") {
+				list = dao.listProduct(0);
+			} else {
+				int paging = Integer.parseInt(page);
+				list = dao.listProduct((paging-1)*9);
+			}
+			
 			request.setAttribute("listProduct", list);
 			RequestDispatcher dispatch = request.getRequestDispatcher("Product.jsp");
 			dispatch.forward(request, response);
 			
 		} else if(command != null && command.equals("search")) {
+			String word = request.getParameter("word");
 			String food = request.getParameter("food");
 			String snack = request.getParameter("snack");
-			ProductDAO dao = new ProductDAO();
+			String order = request.getParameter("order");
+			String kg1 = request.getParameter("kg1");
+			String kg2 = request.getParameter("kg2");
+			String price1 = request.getParameter("price1");
+			String price2 = request.getParameter("price2");
 			
-			List<ProductVO> list = dao.listProduct(food, snack);
+			float fkg1 = 0;
+			float fkg2 = 0;
+			
+			int startPrice = 0;
+			int endPrice = 0;
+			
+			if(kg1 != "" && kg2 != "") {
+				
+				fkg1 = Float.parseFloat(kg1);
+				fkg2 = Float.parseFloat(kg2);
+			}
+	
+			if(price1 != "" && price2 != "") {
+				System.err.println("!!!!!!!!!!!!!!!!");
+				System.err.println(price1 == null);
+				System.err.println("price1 : " + price1);
+				System.err.println("price2 : " + price2);
+				startPrice = Integer.parseInt(price1);
+				endPrice = Integer.parseInt(price2);
+			}
+			
+			ProductDAO dao = new ProductDAO();
+			List<ProductVO> list;
+			
+			int count = dao.SearchCount(word, food, snack, order, fkg1, fkg2, startPrice, endPrice);
+			request.setAttribute("pageCount", (count/9)+1);
+			
+			if(page == null || page == "1") {
+				list = dao.listProduct(0, word, food, snack, order, fkg1, fkg2, startPrice, endPrice);
+			} else {
+				int paging = Integer.parseInt(page);
+				list = dao.listProduct((paging-1)*9, word, food, snack, order, fkg1, fkg2, startPrice, endPrice);
+			}
+				
 			request.setAttribute("listProduct", list);
 			RequestDispatcher dispatch = request.getRequestDispatcher("Product.jsp");
 			dispatch.forward(request, response);
 			
-			
-		} else if(command != null && command.equals("try")) {
-			System.err.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11");
-			TryDAO dao = new TryDAO();
-			List<TryVO> list;
-			
-			int count = dao.ImgCount();
-			request.setAttribute("count", count);
-			request.setAttribute("pageCount", (count/9)+1);
-			
-			if(page == null || page=="1") {
-				list = dao.listImg(0);
-			
-			} else {
-				int paging = Integer.parseInt(page);
-				list = dao.listImg(0+(paging-1)*9);
-			}
-			
-			
-			request.setAttribute("listImg", list);
-			RequestDispatcher dispatch = request.getRequestDispatcher("imgTry.jsp");
-			dispatch.forward(request, response);
-			
-			
 		}
+			
 	}
 
 	/**

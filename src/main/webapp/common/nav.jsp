@@ -6,12 +6,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 	<title>쇼핑몰이름</title>
 	<meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/png" href="favicon.ico">
 
+	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <!--Google Font link-->
     <link href="https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
@@ -50,7 +50,7 @@
 		         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
 		             <i class="fa fa-bars"></i>
 		         </button>
-		         <a class="navbar-brand" href="main.jsp">
+		         <a class="navbar-brand" href="dogcat">
 		             <img src="assets/images/logo.png" class="logo" alt="">
 		             <!--<img src="assets/images/footer-logo.png" class="logo logo-scrolled" alt="">-->
 		         </a>
@@ -82,7 +82,7 @@
 							<a href = "#">자주묻는질문</a>
 						</div>
 					</li>
-		             <li><a href="#test">리뷰</a></li>
+		            <li class = "menu"><div class = "dropdown" style = "padding-right: 10px;"><a href = "#" style = "color:#797979;">리뷰</a></div></li>
 		         </ul>
 		     </div><!-- /.navbar-collapse -->
 		 </div> 

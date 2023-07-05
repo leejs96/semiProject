@@ -1,6 +1,8 @@
 package main;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.sql.Date;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -11,8 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import servlet.ProductDAO;
-import servlet.ProductVO;
+import product.ProductDAO;
+import product.ProductVO;
 
 /**
  * Servlet implementation class Main
@@ -42,12 +44,14 @@ public class Main extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html; charset=utf-8");
-		
+			
 		ProductDAO dao = new ProductDAO();
+		List<ProductVO> list;
+		Date date = java.sql.Date.valueOf(LocalDate.now().minusMonths(1));
+		list = dao.newProduct(date);
 		
-		List<ProductVO> list = dao.listProduct();
 		request.setAttribute("listProduct", list);
-		RequestDispatcher dispatch = request.getRequestDispatcher("Product.jsp");
+		RequestDispatcher dispatch = request.getRequestDispatcher("main.jsp");
 		dispatch.forward(request, response);
 	}
 
