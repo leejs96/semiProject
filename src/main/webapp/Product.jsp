@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"
     isELIgnored="false"
+    import = "java.io.IOException, java.util.Enumeration"
 %>
 
 <!DOCTYPE html>
@@ -19,17 +20,51 @@
 	<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous"> -->
 
 	<script>
-		function process_list(){   // 신상품순, 가격순 버튼 클릭시 submit
+		function process_list(id){   // 신상품순, 가격순 버튼 클릭시 submit
 			document.forms['searching'].submit();
 		} 
 	</script>
+	
+
 
 </head>
 
 <body data-spy="scroll" data-target=".navbar-collapse">
 	<%@ include file="./common/nav.jsp" %>
+	
+	<%!
+		public String isIn(String str,String[] values) throws Exception {
+			for(int i=0;i<values.length;i++)
+			{
+			String temp = values[i];
+			
+			if(temp.equals(str))
+			       return "checked";
+			 }
+			    return "";
+			}
+	%>
+	
+	<%
+		String[] values = {};
+		Enumeration e = request.getParameterNames();
+		
+		while ( e.hasMoreElements() ){
+			String name = (String) e.nextElement();
+			
+			if(name.equals("sub_category")) {
+				values = request.getParameterValues(name); 
+				for (String value : values) {
+				out.println("value=" + value);
+				}  
+			}
+		}
+	%>
+	
 	<% 
 		String file_repo = "/Users/sunny/Desktop/SemiProject3/img/";
+		String animal = request.getParameter("animal");
+		String category = request.getParameter("category");
 		String word = request.getParameter("word");
 		String food = request.getParameter("food");
 		String snack = request.getParameter("snack");
@@ -38,14 +73,49 @@
 		String kg2 = request.getParameter("kg2");
 		String price1 = request.getParameter("price1");
 		String price2 = request.getParameter("price2");
+		String[] sub_category = request.getParameterValues("sub_category");
+
+		if(sub_category != null) {
+			for(int i = 0; i < sub_category.length; i++) {
+				String sub_i = sub_category[i];
+				System.out.println(sub_i);
+			}
+		}
+		
+		
+		String animal_Kor;
+		String category_Kor;
+		
+		if(animal.equals("dog")) {
+			animal_Kor = "강아지";
+		} else {
+			animal_Kor = "고양이";
+		}
+		
+		if(category.equals("food")) {
+			category_Kor = "사료";
+		} else if(category.equals("snack")){
+			category_Kor = "간식";
+		} else {
+			category_Kor = "화식";
+		}
 	%>
 	
-	
-
+<div class="culmn">
+	<section id="test" class="test roomy-20 m-top-110 fix">
+		<div class="container" style="padding-left:4%;">
+			<ul>
+				<li style="font-size:18px; float:left;"><i class="fa fa-angle-right	"></i> <%=animal_Kor %>&nbsp; &nbsp;</li>
+				
+				<li style="font-size:18px; float:left;"><i class="fa fa-angle-right	"></i> <%=category_Kor %></li>
+			</ul>
+		</div>
+	</section>
+</div>
 	<!--Test section-->
 	<div class="culmn">
     	<form name = "searching" class="form-inline my-2 my-lg-0" action="product" method="get">
-       <section id="test" class="test bg-grey roomy-60 m-top-120 fix">
+       <section id="test" class="test bg-grey roomy-60 m-top-10 fix">
                <div class="container">
                    <div class="row" style="margin:0 15%;">                        
                        <table class="table">
@@ -53,6 +123,8 @@
 						    <tr>
 						      <th scope="col" style = "font-size:25px;">상품명</th>
 						      <td>
+							      <input type="hidden" name="animal" value = "<%=animal%>"/>
+							      <input type="hidden" name="category" value = "<%=category%>"/>
 							      <input type="hidden" name="command" value = "search"/>
 							      <input class="form-control" type="search" placeholder="Search" aria-label="Search" name = "word" <%if(word != null){%>value="<%=word%>"<%}%> style="width:70%">
 							      <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fa fa-search"></i></button>
@@ -63,8 +135,19 @@
 								<tr>
 									<th scope="row" style="width:13%;">종류</th>
 									<td>
-										<span class="cond"><input type="checkbox" name = "food" value = "food" <%if(food != null){%>checked<%}%>>사료</span>
-										<span class="cond"><input type="checkbox" name="snack" value = "snack" <%if(snack != null){%>checked<%}%>>간식</span>
+									<%if(category.equals("food")) { %>
+										<span class="cond"><input type="checkbox" class = "chb" name="sub_category" value = "function" <%=isIn("function",values)%>>기능성 사료</span>
+										<span class="cond"><input type="checkbox" class = "chb" name="sub_category" value = "diet" <%=isIn("diet",values)%>>다이어트 사료</span>
+										<span class="cond"><input type="checkbox" class = "chb" name="sub_category" value = "nutrition" <%=isIn("nutrition",values)%>>영양 사료</span>
+									<%} else if(category.equals("snack")) { %>
+										<span class="cond"><input type="checkbox" class = "chb" name="sub_category" value = "home">홈메이드</span>
+										<span class="cond"><input type="checkbox" class = "chb" name="sub_category" value = "wet">습식</span>
+										<span class="cond"><input type="checkbox" class = "chb" name="sub_category" value = "dry">건식</span>
+									<%} else if(category.equals("cooked")) { %>
+										<span class="cond"><input type="checkbox" class = "chb" name="sub_category" value = "duck">오리</span>
+										<span class="cond"><input type="checkbox" class = "chb" name="sub_category" value = "turkey">칠면조</span>
+										<span class="cond"><input type="checkbox" class = "chb" name="sub_category" value = "chicken">닭</span>
+									<%}%>
 									</td>
 								</tr>
 								
@@ -83,39 +166,23 @@
 										<span class="cond"><input type="text" name = "price2" placeholder = "0" <%if(price2 != null){%>value="<%=price2%>"<%}%>> 원</span>
 									</td>
 								</tr>
-								<!-- <tr>
-									<th scope="row" style="width:13%;">kg</th>
-									<td>
-									<span class="cond"><input type="checkbox" name = "1" value="1">~1kg</span>
-									<span class="cond"><input type="checkbox">1~3kg</span>
-									<span class="cond"><input type="checkbox">3~5kg</span>
-									<span class="cond"><input type="checkbox">5kg~</span>
-									<input type="range" class="form-range" min="0" max="10" step="1" id="customRange3" style="width:50%;">
-									 <input type="range" min="10" max="30" 
-                  					  list="temperatures">30&deg; // list와 밑에 id를 똑같이 해줘야 연결이된다.
-								    <datalist id="temperatures">
-								         <option value="12" label="Low"> // value값을 조절할수록 조절이된다.
-								         <option value="20" label="Medium">
-								         <option value="28" label="High">
-								    </datalist>
-									</td>
-								</tr> -->
+								
 							</tbody>
 						</table>
                    </div>
                </div>
            </section><!-- End off test section -->
            <div class="container">
-		<div class="position-relative" style = "margin-top: 5%;">
-			<div class="btn-group btn-group-sm position-absolute bottom-0 end-0" role="group" aria-label="Basic radio toggle button group">
-				<input type="radio" class="btn-check" name="order" id="btnradio1" autocomplete="off" value = "recent" onclick = "process_list();" <%if(order == null || order.equals("recent")){%>checked<%}%>>
-				<label class="btn btn-outline-primary" for="btnradio1">신상품순</label>
+		<div class="position-relative" style = "margin-top: 5%; position: relative;">
+			<div class="btn-group btn-group-sm position-absolute bottom-0 end-0" role="group" aria-label="Basic radio toggle button group" style="float:right;">
+				<input type="radio" class="btn-check" name="order" id="btnradio1" autocomplete="off" value = "recent" onclick = "process_list(this.id);" <%if(order == null || order.equals("recent")){%>checked<%}%> >
+				<label class="btn" for="btnradio1" style = "border-top-left-radius: 3px; border-bottom-left-radius: 3px; <%if(order == null || order.equals("recent")){%>background-color:rgba(93, 156, 89,0.7); color : white;<%}%>">신상품순</label>
 				
-				<input type="radio" class="btn-check" name="order" id="btnradio2" autocomplete="off" value = "Hprice" onclick = "process_list();" <%if(order != null && order.equals("Hprice")){%>checked<%}%>>
-				<label class="btn btn-outline-primary" for="btnradio2">가격높은순</label>
+				<input type="radio" class="btn-check" name="order" id="btnradio2" autocomplete="off" value = "Hprice" onclick = "process_list(this.id);" <%if(order != null && order.equals("Hprice")){%>checked<%}%>>
+				<label class="btn" for="btnradio2" <%if(order != null && order.equals("Hprice")){%>style="background-color:rgba(93, 156, 89,0.7); color : white;"<%}%>>가격높은순</label>
 				
-				<input type="radio" class="btn-check" name="order" id="btnradio3" autocomplete="off" value = "Lprice" onclick = "process_list();" <%if(order != null && order.equals("Lprice")){%>checked<%}%>>
-				<label class="btn btn-outline-primary" for="btnradio3">가격낮은순</label>
+				<input type="radio" class="btn-check" name="order" id="btnradio3" autocomplete="off" value = "Lprice" onclick = "process_list(this.id);" <%if(order != null && order.equals("Lprice")){%>checked<%}%>>
+				<label class="btn" for="btnradio3" <%if(order != null && order.equals("Lprice")){%>style="background-color:rgba(93, 156, 89,0.7); color : white;"<%}%>>가격낮은순</label>
 			</div>
 		</div>
 		</div>
@@ -126,7 +193,7 @@
            <!--product section-->
            <section id="product" class="product">
 				<div class="container">
-					<div class="main_product roomy-80" >
+					<div class="main_product roomy-80" style="padding-top:15px;">
 						<div class="carousel-inner" role="listbox">
                            <div class="item active">
                                <div class="container">
@@ -161,7 +228,6 @@
 			</section><!-- End off Product section -->
          </div><!-- End off row -->
 
-       </div>
 
 
 	<nav aria-label="Page navigation example" style="text-align:center;"> <!-- 전체개수/페이지별 개수 -->
@@ -183,7 +249,7 @@
 	</nav>
 		
     <%@ include file="./common/footer.jsp" %>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script> -->
     </body>
 </html>
 
@@ -197,3 +263,22 @@
 	    }
 	}
 </script>
+
+<style>
+	.btn-check {
+		display: none;
+	}
+	
+	.btn {
+		color : rgb(93, 156, 89);
+	}
+	
+	.btn:hover {
+		background-color:rgba(93, 156, 89,0.7);
+		color : white;
+	}
+	
+	.chb {
+		accent-color:rgb(93, 156, 89);
+	}
+</style>

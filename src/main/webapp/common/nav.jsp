@@ -64,15 +64,17 @@
 		             <li class = "menu">
 						<div class = "dropdown" style = "padding-right: 10px;">강아지</div>
 						<div class = "dropdown_menu">
-							<a href = "product?command=dogFood">사료</a>
-							<a href = "#">간식</a>
+							<a href = "product?animal=dog&category=food">사료</a>
+							<a href = "product?animal=dog&category=snack">간식</a>
+							<a href = "product?animal=dog&category=cooked">화식</a>
 						</div>
 					</li>
 					<li class = "menu">
 						<div class = "dropdown" style = "padding-right: 10px;">고양이</div>
 						<div class = "dropdown_menu">
-							<a href = "#">사료</a>
-							<a href = "#">간식</a>
+							<a href = "product?animal=cat&category=food">사료</a>
+							<a href = "product?animal=cat&category=snack">간식</a>
+							<a href = "product?animal=dog&category=cooked">화식</a>
 						</div>
 					</li>
 					<li class = "menu">

@@ -11,8 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import servlet.TryDAO;
-import servlet.TryVO;
 
 /**
  * Servlet implementation class Product
@@ -42,37 +40,19 @@ public class Product extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html; charset=utf-8");
+		String animal = request.getParameter("animal");
 		String command = request.getParameter("command");
+		String category = request.getParameter("category");
 		String page = request.getParameter("page");
 		
-		if(command != null && command.equals("dogFood")) {
-			
-			ProductDAO dao = new ProductDAO();
-			List<ProductVO> list;
-			int count = dao.Count();
-			
-			request.setAttribute("pageCount", (count/9)+1);
-			
-			if(page == null || page == "1") {
-				list = dao.listProduct(0);
-			} else {
-				int paging = Integer.parseInt(page);
-				list = dao.listProduct((paging-1)*9);
-			}
-			
-			request.setAttribute("listProduct", list);
-			RequestDispatcher dispatch = request.getRequestDispatcher("Product.jsp");
-			dispatch.forward(request, response);
-			
-		} else if(command != null && command.equals("search")) {
+		if(command != null && command.equals("search")) {
 			String word = request.getParameter("word");
-			String food = request.getParameter("food");
-			String snack = request.getParameter("snack");
 			String order = request.getParameter("order");
 			String kg1 = request.getParameter("kg1");
 			String kg2 = request.getParameter("kg2");
 			String price1 = request.getParameter("price1");
 			String price2 = request.getParameter("price2");
+			String[] sub_category = request.getParameterValues("sub_category");
 			
 			float fkg1 = 0;
 			float fkg2 = 0;
@@ -87,10 +67,6 @@ public class Product extends HttpServlet {
 			}
 	
 			if(price1 != "" && price2 != "") {
-				System.err.println("!!!!!!!!!!!!!!!!");
-				System.err.println(price1 == null);
-				System.err.println("price1 : " + price1);
-				System.err.println("price2 : " + price2);
 				startPrice = Integer.parseInt(price1);
 				endPrice = Integer.parseInt(price2);
 			}
@@ -98,21 +74,40 @@ public class Product extends HttpServlet {
 			ProductDAO dao = new ProductDAO();
 			List<ProductVO> list;
 			
-			int count = dao.SearchCount(word, food, snack, order, fkg1, fkg2, startPrice, endPrice);
+			int count = dao.SearchCount(word, category, animal, order, fkg1, fkg2, startPrice, endPrice, sub_category);
 			request.setAttribute("pageCount", (count/9)+1);
 			
 			if(page == null || page == "1") {
-				list = dao.listProduct(0, word, food, snack, order, fkg1, fkg2, startPrice, endPrice);
+				list = dao.listProduct(0, word, category, animal, order, fkg1, fkg2, startPrice, endPrice, sub_category);
 			} else {
 				int paging = Integer.parseInt(page);
-				list = dao.listProduct((paging-1)*9, word, food, snack, order, fkg1, fkg2, startPrice, endPrice);
+				list = dao.listProduct((paging-1)*9, word, category, animal, order, fkg1, fkg2, startPrice, endPrice, sub_category);
 			}
 				
 			request.setAttribute("listProduct", list);
 			RequestDispatcher dispatch = request.getRequestDispatcher("Product.jsp");
 			dispatch.forward(request, response);
 			
-		}
+		} else if(animal != null && (animal.equals("dog") || animal.equals("cat"))) {
+			
+			ProductDAO dao = new ProductDAO();
+			List<ProductVO> list;
+			int count = dao.Count(category, animal);
+			
+			request.setAttribute("pageCount", (count/9)+1);
+			
+			if(page == null || page == "1") {
+				list = dao.listProduct(0,category, animal);
+			} else {
+				int paging = Integer.parseInt(page);
+				list = dao.listProduct((paging-1)*9,category, animal);
+			}
+			
+			request.setAttribute("listProduct", list);
+			RequestDispatcher dispatch = request.getRequestDispatcher("Product.jsp");
+			dispatch.forward(request, response);
+			
+		} 
 			
 	}
 

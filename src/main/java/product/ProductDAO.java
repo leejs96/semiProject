@@ -72,12 +72,13 @@ public class ProductDAO {
 		return list;
 	}
 	
-	public List<ProductVO> listProduct(int start){
+	public List<ProductVO> listProduct(int start, String category, String animal){
 		List<ProductVO> list = new ArrayList<ProductVO>();
 		try {
 			con = dataFactory.getConnection();
 			
 			String sql = "SELECT * FROM product";
+			sql += " WHERE category='" + category + "' and animal = '" + animal +"'";
 			sql += " ORDER BY PDate DESC";
 			sql += " LIMIT " + start + ", 9";
 			System.out.println("preparedStatement : " + sql);
@@ -116,12 +117,13 @@ public class ProductDAO {
 		return list;
 	}
 	
-	public int Count() {
+	public int Count(String category, String animal) {
 		int count = 0; 
 		try {
 			con = dataFactory.getConnection();
 			
 			String sql = "SELECT count(*) as cnt FROM product";
+			sql += " WHERE category='" + category + "' and animal = '" + animal +"'";
 			System.out.println("preparedStatement : " + sql);
 			
 			pstmt = con.prepareStatement(sql);
@@ -140,24 +142,19 @@ public class ProductDAO {
 		return count;
 	}
 	
-	public List<ProductVO> listProduct(int start, String word, String food, String snack, String order, float kg1, float kg2, int price1, int price2){
+	public List<ProductVO> listProduct(int start, String word, String category, String animal, String order, float kg1, float kg2, int price1, int price2, String[] sub_category){
 		List<ProductVO> list = new ArrayList<ProductVO>();
 		try {	
 			con = dataFactory.getConnection();
 			
-			String sql = "SELECT * FROM product"
-					+ " WHERE 1=1";
+			String sql = "SELECT * FROM product WHERE category='" + category + "' and animal = '" + animal +"'";
 			
 			if(word.length() > 0) {
 				sql += " and PName like '%" + word + "%'";
 			}
 			
-			if(food != null && snack != null) {
-				sql += " and (category = '사료' or category = '간식')";
-			} else if(food != null) {
-				sql += " and category = '사료'";
-			} else if(snack != null) {
-				sql += " and category = '간식'";
+			 if(category != null) {
+				sql += " and category = '"+ category +"'";
 			}
 			
 			if(kg2 > 0) {
@@ -167,7 +164,23 @@ public class ProductDAO {
 			if(price2 > 0) {
 				sql += " and price between " + price1 + " and " + price2;
 			}
-
+			
+			if(sub_category != null) {
+				if(sub_category.length == 1) {
+					sql += " and sub_category = '" + sub_category[0] +"'";
+				} else if(sub_category.length > 1) {
+					sql += " and (";
+					for(int i = 0; i < sub_category.length; i++) {
+						sql += "sub_category = '" + sub_category[i] + "'";
+						if(i != sub_category.length-1) {
+							sql += " or ";
+						}
+					}
+					sql += ")";
+				}
+			}
+			
+			
 			if(order == null || order.equals("recent")) {
 				sql += " ORDER BY PDate DESC";
 			} else if(order.equals("Hprice")) {
@@ -214,23 +227,19 @@ public class ProductDAO {
 		return list;
 	}
 	
-	public int SearchCount(String word, String food, String snack, String order, float kg1, float kg2, int price1, int price2) {
+	public int SearchCount(String word, String category, String animal, String order, float kg1, float kg2, int price1, int price2, String[] sub_category) {
 		int count = 0; 
 		try {
 			con = dataFactory.getConnection();
 			
-			String sql = "SELECT count(*) as cnt FROM product WHERE 1=1";
+			String sql = "SELECT count(*) as cnt FROM product WHERE category='" + category + "' and animal = '" + animal +"'";
 			
 			if(word != null) {
 				sql += " and PName like '%" + word + "%'";
 			}
 			
-			if(food != null && snack != null) {
-				sql += " and (category = '사료' or category = '간식')";
-			} else if(food != null) {
-				sql += " and category = '사료'";
-			} else if(snack != null) {
-				sql += " and category = '간식'";
+			if(category != null) {
+				sql += " and category = '"+ category +"'";
 			}
 			
 			if(kg2 > 0) {
@@ -241,6 +250,21 @@ public class ProductDAO {
 				sql += " and price between " + price1 + " and " + price2;
 			}
 
+			if(sub_category != null) {
+				if(sub_category.length == 1) {
+					sql += " and sub_category = '" + sub_category[0] +"'";
+				} else if(sub_category.length > 1) {
+					sql += " and (";
+					for(int i = 0; i < sub_category.length; i++) {
+						sql += "sub_category = '" + sub_category[i] + "'";
+						if(i != sub_category.length-1) {
+							sql += " or ";
+						}
+					}
+					sql += ")";
+				}
+			}
+			
 			if(order == null || order.equals("recent")) {
 				sql += " ORDER BY PDate DESC";
 			} else if(order.equals("Hprice")) {
