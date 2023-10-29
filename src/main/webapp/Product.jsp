@@ -3,7 +3,7 @@
     isELIgnored="false"
     import = "java.io.IOException, java.util.Enumeration"
 %>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,21 +16,18 @@
 			margin-right:10px;
 		}
 	</style>
-	
-	<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous"> -->
 
 	<script>
 		function process_list(id){   // 신상품순, 가격순 버튼 클릭시 submit
 			document.forms['searching'].submit();
 		} 
 	</script>
-	
-
 
 </head>
 
 <body data-spy="scroll" data-target=".navbar-collapse">
 	<%@ include file="./common/nav.jsp" %>
+	<c:set var="contextPath"  value="${pageContext.request.contextPath}"  />
 	
 	<%!
 		public String isIn(String str,String[] values) throws Exception {
@@ -62,7 +59,7 @@
 	%>
 	
 	<% 
-		String file_repo = "/Users/sunny/Desktop/SemiProject3/img/";
+		String file_repo = "/ThisIsJava/workspace/semiProject/src/main/webapp/assets/images/";
 		String animal = request.getParameter("animal");
 		String category = request.getParameter("category");
 		String word = request.getParameter("word");
@@ -82,7 +79,6 @@
 			}
 		}
 		
-		
 		String animal_Kor;
 		String category_Kor;
 		
@@ -101,166 +97,156 @@
 		}
 	%>
 	
-<div class="culmn">
-	<section id="test" class="test roomy-20 m-top-110 fix">
-		<div class="container" style="padding-left:4%;">
-			<ul>
-				<li style="font-size:18px; float:left;"><i class="fa fa-angle-right	"></i> <%=animal_Kor %>&nbsp; &nbsp;</li>
-				
-				<li style="font-size:18px; float:left;"><i class="fa fa-angle-right	"></i> <%=category_Kor %></li>
-			</ul>
-		</div>
-	</section>
-</div>
-	<!--Test section-->
 	<div class="culmn">
-    	<form name = "searching" class="form-inline my-2 my-lg-0" action="product" method="get">
-       <section id="test" class="test bg-grey roomy-60 m-top-10 fix">
-               <div class="container">
-                   <div class="row" style="margin:0 15%;">                        
-                       <table class="table">
-						  <thead>
-						    <tr>
-						      <th scope="col" style = "font-size:25px;">상품명</th>
-						      <td>
-							      <input type="hidden" name="animal" value = "<%=animal%>"/>
-							      <input type="hidden" name="category" value = "<%=category%>"/>
-							      <input type="hidden" name="command" value = "search"/>
-							      <input class="form-control" type="search" placeholder="Search" aria-label="Search" name = "word" <%if(word != null){%>value="<%=word%>"<%}%> style="width:70%">
-							      <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fa fa-search"></i></button>
-						      </td>
-						    </tr>
-						  </thead>
-						  <tbody class="table-group-divider" >
-								<tr>
+		<div class="culmn">
+			<section id="test" class="test roomy-20 m-top-110 fix">
+				<div class="container" style="padding-left:4%;">
+					<ul>
+						<li style="font-size:18px; float:left;"><i class="fa fa-angle-right	"></i> <%=animal_Kor %>&nbsp; &nbsp;</li>
+						<li style="font-size:18px; float:left;"><i class="fa fa-angle-right	"></i> <%=category_Kor %></li>
+					</ul>
+				</div>
+			</section>
+		</div>
+		<!--Test section-->
+		<div class="culmn">
+			<form name = "searching" class="form-inline my-2 my-lg-0" action="product" method="get">
+				<section id="test" class="test bg-grey roomy-60 m-top-10 fix">
+					<div class="container">
+						<div class="row" style="margin:0 15%;">                        
+							<table class="table">
+								<thead>
+									<tr>
+										<th scope="col" style = "font-size:25px;">상품명</th>
+										<td>
+											<input type="hidden" name="animal" value = "<%=animal%>"/>
+											<input type="hidden" name="category" value = "<%=category%>"/>
+											<input type="hidden" name="command" value = "search"/>
+											<input class="form-control" type="search" placeholder="Search" aria-label="Search" name = "word" <%if(word != null){%>value="<%=word%>"<%}%> style="width:70%">
+											<button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fa fa-search"></i></button>
+										</td>
+									</tr>
+								</thead>
+								<tbody class="table-group-divider" >
+									<tr>
 									<th scope="row" style="width:13%;">종류</th>
-									<td>
-									<%if(category.equals("food")) { %>
-										<span class="cond"><input type="checkbox" class = "chb" name="sub_category" value = "function" <%=isIn("function",values)%>>기능성 사료</span>
-										<span class="cond"><input type="checkbox" class = "chb" name="sub_category" value = "diet" <%=isIn("diet",values)%>>다이어트 사료</span>
-										<span class="cond"><input type="checkbox" class = "chb" name="sub_category" value = "nutrition" <%=isIn("nutrition",values)%>>영양 사료</span>
-									<%} else if(category.equals("snack")) { %>
-										<span class="cond"><input type="checkbox" class = "chb" name="sub_category" value = "home">홈메이드</span>
-										<span class="cond"><input type="checkbox" class = "chb" name="sub_category" value = "wet">습식</span>
-										<span class="cond"><input type="checkbox" class = "chb" name="sub_category" value = "dry">건식</span>
-									<%} else if(category.equals("cooked")) { %>
-										<span class="cond"><input type="checkbox" class = "chb" name="sub_category" value = "duck">오리</span>
-										<span class="cond"><input type="checkbox" class = "chb" name="sub_category" value = "turkey">칠면조</span>
-										<span class="cond"><input type="checkbox" class = "chb" name="sub_category" value = "chicken">닭</span>
-									<%}%>
-									</td>
-								</tr>
-								
-								<tr>
-									<th scope="row" style="width:13%;">용량</th>
-									<td>
-										<span class="cond"><input type="text" name = "kg1" placeholder = "0.0" <%if(kg1 != null){%>value="<%=kg1%>"<%}%>> ~</span>
-										<span class="cond"><input type="text" name = "kg2" placeholder = "20.0" <%if(kg2 != null){%>value="<%=kg2%>"<%}%>> kg</span>
-									</td>
-								</tr>
-
-								<tr>
-									<th scope="row" style="width:13%;">가격</th>
-									<td>
-										<span class="cond"><input type="text" name = "price1" placeholder = "0" <%if(price1 != null){%>value="<%=price1%>"<%}%>> ~</span>
-										<span class="cond"><input type="text" name = "price2" placeholder = "0" <%if(price2 != null){%>value="<%=price2%>"<%}%>> 원</span>
-									</td>
-								</tr>
-								
-							</tbody>
-						</table>
-                   </div>
-               </div>
-           </section><!-- End off test section -->
-           <div class="container">
-		<div class="position-relative" style = "margin-top: 5%; position: relative;">
-			<div class="btn-group btn-group-sm position-absolute bottom-0 end-0" role="group" aria-label="Basic radio toggle button group" style="float:right;">
-				<input type="radio" class="btn-check" name="order" id="btnradio1" autocomplete="off" value = "recent" onclick = "process_list(this.id);" <%if(order == null || order.equals("recent")){%>checked<%}%> >
-				<label class="btn" for="btnradio1" style = "border-top-left-radius: 3px; border-bottom-left-radius: 3px; <%if(order == null || order.equals("recent")){%>background-color:rgba(93, 156, 89,0.7); color : white;<%}%>">신상품순</label>
+										<td>
+										<%if(category.equals("food")) { %>
+											<span class="cond"><input type="checkbox" class = "chb" name="sub_category" value = "function" <%=isIn("function",values)%>>기능성 사료</span>
+											<span class="cond"><input type="checkbox" class = "chb" name="sub_category" value = "diet" <%=isIn("diet",values)%>>다이어트 사료</span>
+											<span class="cond"><input type="checkbox" class = "chb" name="sub_category" value = "nutrition" <%=isIn("nutrition",values)%>>영양 사료</span>
+										<%} else if(category.equals("snack")) { %>
+											<span class="cond"><input type="checkbox" class = "chb" name="sub_category" value = "home" <%=isIn("home",values)%>>홈메이드</span>
+											<span class="cond"><input type="checkbox" class = "chb" name="sub_category" value = "wet" <%=isIn("wet",values)%>>습식</span>
+											<span class="cond"><input type="checkbox" class = "chb" name="sub_category" value = "dry" <%=isIn("dry",values)%>>건식</span>
+										<%} else if(category.equals("cooked")) { %>
+											<span class="cond"><input type="checkbox" class = "chb" name="sub_category" value = "duck" <%=isIn("duck",values)%>>오리</span>
+											<span class="cond"><input type="checkbox" class = "chb" name="sub_category" value = "turkey" <%=isIn("turkey",values)%>>칠면조</span>
+											<span class="cond"><input type="checkbox" class = "chb" name="sub_category" value = "chicken" <%=isIn("chicken",values)%>>닭</span>
+										<%}%>
+										</td>
+									</tr>
+										
+									<tr>
+										<th scope="row" style="width:13%;">용량</th>
+										<td>
+											<span class="cond"><input type="text" name = "kg1" placeholder = "0.0" <%if(kg1 != null){%>value="<%=kg1%>"<%}%>> ~</span>
+											<span class="cond"><input type="text" name = "kg2" placeholder = "20.0" <%if(kg2 != null){%>value="<%=kg2%>"<%}%>> kg</span>
+										</td>
+									</tr>
+										
+									<tr>
+										<th scope="row" style="width:13%;">가격</th>
+										<td>
+											<span class="cond"><input type="text" name = "price1" placeholder = "0" <%if(price1 != null){%>value="<%=price1%>"<%}%>> ~</span>
+											<span class="cond"><input type="text" name = "price2" placeholder = "0" <%if(price2 != null){%>value="<%=price2%>"<%}%>> 원</span>
+										</td>
+									</tr>
+											
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</section><!-- End off test section -->
 				
-				<input type="radio" class="btn-check" name="order" id="btnradio2" autocomplete="off" value = "Hprice" onclick = "process_list(this.id);" <%if(order != null && order.equals("Hprice")){%>checked<%}%>>
-				<label class="btn" for="btnradio2" <%if(order != null && order.equals("Hprice")){%>style="background-color:rgba(93, 156, 89,0.7); color : white;"<%}%>>가격높은순</label>
-				
-				<input type="radio" class="btn-check" name="order" id="btnradio3" autocomplete="off" value = "Lprice" onclick = "process_list(this.id);" <%if(order != null && order.equals("Lprice")){%>checked<%}%>>
-				<label class="btn" for="btnradio3" <%if(order != null && order.equals("Lprice")){%>style="background-color:rgba(93, 156, 89,0.7); color : white;"<%}%>>가격낮은순</label>
-			</div>
+				<div class="container">
+					<div class="position-relative" style = "margin-top: 5%; position: relative;">
+						<div class="btn-group btn-group-sm position-absolute bottom-0 end-0" role="group" aria-label="Basic radio toggle button group" style="float:right;">
+							<input type="radio" class="btn-check" name="order" id="btnradio1" autocomplete="off" value = "recent" onclick = "process_list(this.id);" <%if(order == null || order.equals("recent")){%>checked<%}%> >
+							<label class="btn" for="btnradio1" style = "border-top-left-radius: 3px; border-bottom-left-radius: 3px; <%if(order == null || order.equals("recent")){%>background-color:rgba(93, 156, 89,0.7); color : white;<%}%>">신상품순</label>
+							
+							<input type="radio" class="btn-check" name="order" id="btnradio2" autocomplete="off" value = "Hprice" onclick = "process_list(this.id);" <%if(order != null && order.equals("Hprice")){%>checked<%}%>>
+							<label class="btn" for="btnradio2" <%if(order != null && order.equals("Hprice")){%>style="background-color:rgba(93, 156, 89,0.7); color : white;"<%}%>>가격높은순</label>
+							
+							<input type="radio" class="btn-check" name="order" id="btnradio3" autocomplete="off" value = "Lprice" onclick = "process_list(this.id);" <%if(order != null && order.equals("Lprice")){%>checked<%}%>>
+							<label class="btn" for="btnradio3" <%if(order != null && order.equals("Lprice")){%>style="background-color:rgba(93, 156, 89,0.7); color : white;"<%}%>>가격낮은순</label>
+						</div>
+					</div>
+				</div>
+			</form>
 		</div>
-		</div>
-  		 </form>
-       </div>
-
-       <div class="culmn">
-           <!--product section-->
-           <section id="product" class="product">
+	
+		<div class="culmn">
+			<!--product section-->
+			<section id="product" class="product">
 				<div class="container">
 					<div class="main_product roomy-80" style="padding-top:15px;">
 						<div class="carousel-inner" role="listbox">
-                           <div class="item active">
-                               <div class="container">
-                                   <div class="row m-top-30">
-	                                    <c:forEach var="prod" items="${listProduct }"> <!-- 특정 개수 초과하면 다음페이지로 넘어가게 설정해야함 (if문 돌려서 ex>int가 8이 넘어가면 2페이지부터)-->
+							<div class="item active">
+								<div class="container">
+									<div class="row m-top-30">
+										<c:forEach var="prod" items="${listProduct }"> <!-- 특정 개수 초과하면 다음페이지로 넘어가게 설정해야함 (if문 돌려서 ex>int가 8이 넘어가면 2페이지부터)-->
 											<div class="col-sm-4">
 												<div class="port_item xs-m-top-30">
-	                                                <div class="port_img">
-	                                                    <img src="<%=file_repo %>${prod.PImg}" class="img-thumbnail" alt=""/>
-	                                                    <div class="port_overlay text-center">
-	                                                       <a><i class="fa fa-heart-o" onclick="heart(this);"></i></a>
-	                                                       <a><i class="fa fa-shopping-cart"></i></a>
-	                                                    </div>
-	                                                </div>
-	                                                <div class="port_caption m-top-10">
-	                                                    <h5>${prod.PName }</h5>
-	                                                    <h6>- ${prod.price }원</h6>
-	                                                </div>
-	                                            </div>
-	                                       	</div>
+													<div class="port_img">
+														<img src="<%=file_repo %>${prod.PIMG}" class="img-thumbnail" alt=""/>
+														<div class="port_overlay text-center">
+															<a><i class="fa fa-shopping-cart" id = "${prod.PCODE }" onclick="addCart(this.id,'<%=user_id%>');"></i></a>
+														</div>
+													</div>
+													<div class="port_caption m-top-10">
+														<h5>${prod.PNAME }</h5>
+														<h6>- ${prod.PRICE }원</h6>
+													</div>
+												</div>
+											</div>
 										</c:forEach>
-                                  	</div>
+									</div>
 								</div>
-                                   
-                                   
 							</div>
 						</div>
-
+						
 					</div>
-
+				
 				</div>
 			</section><!-- End off Product section -->
-         </div><!-- End off row -->
+		</div><!-- End off row -->
 
-
-
-	<nav aria-label="Page navigation example" style="text-align:center;"> <!-- 전체개수/페이지별 개수 -->
-		<ul class="pagination">
-			<%-- <li class="page-item">
-				<a class="page-link" href="product?command=dogFood&page=${i+1 }" aria-label="Previous">
-				<span aria-hidden="true">&laquo;</span>
-				</a>
-			</li> --%>
-			<c:forEach var="i" begin = "1" end="${pageCount }">
-				<li class="page-item"><a class="page-link" href="product?command=dogFood&page=${i}">${i}</a></li>
-			</c:forEach>
-			<%-- <li class="page-item">
-				<a class="page-link" href="product?command=dogFood&page=${i+1 }" aria-label="Next">
-				<span aria-hidden="true">&raquo;</span>
-				</a>
-			</li> --%>
-		</ul>
-	</nav>
+		<nav aria-label="Page navigation example" style="text-align:center;"> <!-- 전체개수/페이지별 개수 -->
+			<ul class="pagination">
+				<c:forEach var="i" begin = "1" end="${pageCount }">
+					<li class="page-item">
+						<%-- <c:if test="${page eq ${i}}" > --%>
+							<a class="page-link" href="product?animal=<%=animal%>&category=<%=category %>&page=${i}">${i}</a>
+						<%-- </c:if> --%>
+					</li>
+				</c:forEach>
+			</ul>
+		</nav>
 		
-    <%@ include file="./common/footer.jsp" %>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script> -->
-    </body>
+	</div>
+   	<%@ include file="./common/footer.jsp" %>
+</body>
 </html>
 
 <script>
-	function heart(obj) {
-		if($(obj).hasClass("fa-heart-o")) {
-			$(obj).addClass("fa-heart").removeClass("fa-heart-o");
-			/* 누를 때마다 db update문(ajax로?!) */
-	    } else {
-			$(obj).addClass("fa-heart-o").removeClass("fa-heart");
-	    }
+	function addCart(PCode,id) {
+		if(id == "null") {
+			alert("로그인을 먼저 하세요");
+			location.href="login_Pet.jsp";
+		} else {
+			location.href="${contextPath}/cart?command=in&PCode=" + PCode;
+		}
 	}
 </script>
 
@@ -281,4 +267,5 @@
 	.chb {
 		accent-color:rgb(93, 156, 89);
 	}
+	
 </style>

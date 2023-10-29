@@ -46,6 +46,7 @@ public class Product extends HttpServlet {
 		String page = request.getParameter("page");
 		
 		if(command != null && command.equals("search")) {
+			
 			String word = request.getParameter("word");
 			String order = request.getParameter("order");
 			String kg1 = request.getParameter("kg1");
@@ -77,6 +78,8 @@ public class Product extends HttpServlet {
 			int count = dao.SearchCount(word, category, animal, order, fkg1, fkg2, startPrice, endPrice, sub_category);
 			request.setAttribute("pageCount", (count/9)+1);
 			
+			
+			
 			if(page == null || page == "1") {
 				list = dao.listProduct(0, word, category, animal, order, fkg1, fkg2, startPrice, endPrice, sub_category);
 			} else {
@@ -107,7 +110,7 @@ public class Product extends HttpServlet {
 			RequestDispatcher dispatch = request.getRequestDispatcher("Product.jsp");
 			dispatch.forward(request, response);
 			
-		} 
+		}
 			
 	}
 

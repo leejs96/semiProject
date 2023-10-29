@@ -3,63 +3,77 @@ package product;
 import java.sql.Date;
 
 public class ProductVO {
-	private int PCode;
-	private String 	PName;
-	private int price;
-	private int stock;
-	private String category;
-	private int PKG;
-	private Date PDate;
-	private String PImg;
+	private int PCODE;
+	private String 	PNAME;
+	private int PRICE;
+	private int STOCK;
+	private String CATEGORY;
+	private float PKG;
+	private Date PDATE;
+	private String PIMG;
+	private String ANIMAL;
+	private String SUB_CATEGORY;
 	
 	
-	public int getPCode() {
-		return PCode;
+	public int getPCODE() {
+		return PCODE;
 	}
-	public void setPCode(int pCode) {
-		PCode = pCode;
+	public void setPCODE(int pCODE) {
+		PCODE = pCODE;
 	}
-	public String getPName() {
-		return PName;
+	public String getPNAME() {
+		return PNAME;
 	}
-	public void setPName(String pName) {
-		PName = pName;
+	public void setPNAME(String pNAME) {
+		PNAME = pNAME;
 	}
-	public int getPrice() {
-		return price;
+	public int getPRICE() {
+		return PRICE;
 	}
-	public void setPrice(int price) {
-		this.price = price;
+	public void setPRICE(int pRICE) {
+		PRICE = pRICE;
 	}
-	public int getStock() {
-		return stock;
+	public int getSTOCK() {
+		return STOCK;
 	}
-	public void setStock(int stock) {
-		this.stock = stock;
+	public void setSTOCK(int sTOCK) {
+		STOCK = sTOCK;
 	}
-	public String getCategory() {
-		return category;
+	public String getCATEGORY() {
+		return CATEGORY;
 	}
-	public void setCategory(String category) {
-		this.category = category;
+	public void setCATEGORY(String cATEGORY) {
+		CATEGORY = cATEGORY;
 	}
-	public int getPKG() {
+	public float getPKG() {
 		return PKG;
 	}
-	public void setPKG(int pKG) {
+	public void setPKG(float pKG) {
 		PKG = pKG;
 	}
-	public Date getPDate() {
-		return PDate;
+	public Date getPDATE() {
+		return PDATE;
 	}
-	public void setPDate(Date pDate) {
-		PDate = pDate;
+	public void setPDATE(Date pDATE) {
+		PDATE = pDATE;
 	}
-	public String getPImg() {
-		return PImg;
+	public String getPIMG() {
+		return PIMG;
 	}
-	public void setPImg(String pImg) {
-		PImg = pImg;
+	public void setPIMG(String pIMG) {
+		PIMG = pIMG;
+	}
+	public String getANIMAL() {
+		return ANIMAL;
+	}
+	public void setANIMAL(String aNIMAL) {
+		ANIMAL = aNIMAL;
+	}
+	public String getSUB_CATEGORY() {
+		return SUB_CATEGORY;
+	}
+	public void setSUB_CATEGORY(String sUB_CATEGORY) {
+		SUB_CATEGORY = sUB_CATEGORY;
 	}
 	
 }

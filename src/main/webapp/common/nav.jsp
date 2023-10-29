@@ -26,7 +26,6 @@
 
     <!--Theme custom css -->
     <link rel="stylesheet" href="assets/css/style.css">
-    <!--<link rel="stylesheet" href="assets/css/colors/maron.css">-->
 
     <!--Theme Responsive css-->
     <link rel="stylesheet" href="assets/css/responsive.css" />
@@ -35,15 +34,28 @@
 </head>
 
 <body>
+	<% String user_id = (String)session.getAttribute("id"); %>
+
 	<nav class="navbar navbar-default bootsnav navbar-fixed">
-		 <div class="container"> 
+		<div class="container"> 
 		     <div class="attr-nav">
-		         <ul>
-		             <li class="search"><a href="#"><i class="fa fa-heart-o"></i></a></li>
-		             <li class="search"><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
-		             <li class="search"><a href="#"><i class="fa fa-user"></i></a></li>
-		         </ul>
-		     </div> 
+				<ul>
+					<!--  <li class="search"><i class="fa fa-heart-o"></i></li> -->
+					<li class="search"><i class="fa fa-shopping-cart" onclick = "shoppingcart('<%=user_id%>')"></i></li>
+					<li class = "menu">
+						<div class = "dropdown" style = "padding-right: 10px;"><i class="fa fa-user"></i></div>
+						<div class = "dropdown_menu">
+						<% if(user_id != null) { %>
+							<a href = "product?animal=dog&category=food">내정보</a>
+							<a href = "dogcat?command=logout">로그아웃</a>
+						<% } else { %>
+							<a href = "login_Pet.jsp">로그인</a>
+						<% } %>
+						</div>
+					</li>
+				</ul>
+			</div> 
+		
 		
 		     <!-- Start Header Navigation -->
 		     <div class="navbar-header">
@@ -93,6 +105,17 @@
 </body>
 </html>
 
+<script>
+	function shoppingcart(id) {
+		if(id == "null") {
+			alert("로그인을 먼저 하세요");
+			location.href="login_Pet.jsp";
+		} else {
+			location.href="shoppingcart.jsp"
+		}
+	}
+</script>
+
 <style>
 	.dropdown {
 		position : relative;
@@ -131,4 +154,12 @@
 	    padding: 7px;
 	    box-shadow: 5px 8px 16px 0px rgba(0,0,0,0.2);
 	}
+	
+	.search {
+	    color: #6f6f6f;
+	    display: block;
+	    padding: 28px 15px;
+	    position: relative;
+	}
+	
 </style>
